@@ -1,0 +1,9 @@
+[submodule "external/cxxopts"]
+	path = external/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git
+[submodule "external/opencv"]
+	path = external/opencv
+	url = https://github.com/opencv/opencv
+[submodule "external/emsdk"]
+	path = external/emsdk
+	url = https://github.com/emscripten-core/emsdk.git

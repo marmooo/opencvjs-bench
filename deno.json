@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "jimp": "npm:jimp@^1.6.0",
+    "markdown-table": "npm:markdown-table@^3.0.4"
+  },
+  "tasks": {
+    "bench": "deno run -R --allow-run=build/bench wasm_type_bench.js"
+  }
+}
