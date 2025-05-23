@@ -4,6 +4,8 @@
     "markdown-table": "npm:markdown-table@^3.0.4"
   },
   "tasks": {
-    "bench": "deno run -R --allow-run=build/bench wasm_type_bench.js"
+    "wasm_type_bench": "deno run -R --allow-run=build/cpp_O3/bench wasm_type_bench.js",
+    "wasm_opt_bench": "deno run -R --allow-run wasm_opt_bench.js",
+    "cpp_opt_bench": "deno run -R --allow-run cpp_opt_bench.js"
   }
 }
