@@ -1,8 +1,8 @@
-import cvJsInit from "./external/opencv/build_js/bin/opencv_js.js";
-import cvWasmInit from "./external/opencv/build_wasm/bin/opencv_js.js";
-import cvSimdInit from "./external/opencv/build_simd/bin/opencv_js.js";
-import cvThreadsInit from "./external/opencv/build_threads/bin/opencv_js.js";
-import cvThreadedSimdInit from "./external/opencv/build_threaded-simd/bin/opencv_js.js";
+import cvJsInit from "./build/js/bin/opencv_js.js";
+import cvWasmInit from "./build/wasm/bin/opencv_js.js";
+import cvSimdInit from "./build/wasm_simd/bin/opencv_js.js";
+import cvThreadsInit from "./build/wasm_threads/bin/opencv_js.js";
+import cvThreadedSimdInit from "./build/wasm_threaded-simd/bin/opencv_js.js";
 import { Jimp } from "jimp";
 import { markdownTable } from "markdown-table";
 
@@ -25,7 +25,7 @@ const header = [
 ];
 const blurSize = 11;
 
-function benchmark(func, warmup = 3, repeat = 5) {
+function benchmarkSync(func, warmup = 3, repeat = 5) {
   const firstRun = func();
   for (let i = 0; i < warmup; ++i) func();
   const times = [];
@@ -36,7 +36,7 @@ function benchmark(func, warmup = 3, repeat = 5) {
   return { firstRun, avg };
 }
 
-async function benchmarkAsync(func, warmup = 3, repeat = 5) {
+async function benchmark(func, warmup = 3, repeat = 5) {
   const firstRun = await func();
   for (let i = 0; i < warmup; ++i) await func();
   const times = [];
@@ -50,7 +50,7 @@ async function benchmarkAsync(func, warmup = 3, repeat = 5) {
 function split(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
   const channels = new cv.MatVector();
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.split(src, channels);
     const t2 = performance.now();
@@ -73,7 +73,7 @@ function LUT(name, cv, img) {
     lut.ucharPtr(0, i)[0] = 255 - i;
   }
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.LUT(src, lut, src);
     const t2 = performance.now();
@@ -92,7 +92,7 @@ function adaptiveThreshold(name, cv, img) {
 
   cv.cvtColor(srcColor, src, cv.COLOR_RGBA2GRAY);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.adaptiveThreshold(
       src,
@@ -116,7 +116,7 @@ function adaptiveThreshold(name, cv, img) {
 function blur(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.blur(
       src,
@@ -141,7 +141,7 @@ function Canny(name, cv, img) {
 
   cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.Canny(gray, edges, 50, 150);
     const t2 = performance.now();
@@ -159,7 +159,7 @@ function cvtColor(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
   const dst = new cv.Mat();
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
     const t2 = performance.now();
@@ -175,7 +175,7 @@ function cvtColor(name, cv, img) {
 function boxFilter(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.boxFilter(
       src,
@@ -199,7 +199,7 @@ function dilate(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
   const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.dilate(src, src, kernel);
     const t2 = performance.now();
@@ -216,7 +216,7 @@ function erode(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
   const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.erode(src, src, kernel);
     const t2 = performance.now();
@@ -238,7 +238,7 @@ function findContours(name, cv, img) {
   cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
   cv.threshold(gray, gray, 127, 255, cv.THRESH_BINARY);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.findContours(
       gray,
@@ -262,7 +262,7 @@ function findContours(name, cv, img) {
 function GaussianBlur(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.GaussianBlur(src, src, new cv.Size(blurSize, blurSize), 0);
     const t2 = performance.now();
@@ -278,7 +278,7 @@ function resize(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
   const dst = new cv.Mat();
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.resize(src, dst, new cv.Size(2000, 2000), 0, 0, cv.INTER_LINEAR);
     const t2 = performance.now();
@@ -294,7 +294,7 @@ function resize(name, cv, img) {
 function stackBlur(name, cv, img) {
   const src = cv.matFromImageData(img.bitmap);
 
-  const result = benchmark(() => {
+  const result = benchmarkSync(() => {
     const t1 = performance.now();
     cv.stackBlur(src, src, new cv.Size(blurSize, blurSize));
     const t2 = performance.now();
@@ -307,8 +307,8 @@ function stackBlur(name, cv, img) {
 }
 
 async function benchCvCpp(name, imgPath) {
-  const result = await benchmarkAsync(async () => {
-    const command = new Deno.Command("./build/bench", {
+  const result = await benchmark(async () => {
+    const command = new Deno.Command("./build/cpp_O3/bench", {
       args: [name, imgPath],
     });
     const { code, stdout, stderr } = await command.output();
