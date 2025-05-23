@@ -18,6 +18,11 @@ deno task cpp_opt_bench
 
 ## Benchmark
 
+```
+    CPU | Intel(R) Core(TM) i5-6200U CPU @ 2.30GHz
+Runtime | Deno 2.3.3 (x86_64-unknown-linux-gnu)
+```
+
 ### wasm_type_bench
 
 firstRun
