@@ -1,10 +1,10 @@
 emsdk_dir=external/emsdk
 opencv_dir=external/opencv
 build_py=${opencv_dir}/platforms/js/build_js.py
-build_wasm_dir=${opencv_dir}/build_wasm
-build_simd_dir=${opencv_dir}/build_simd
-build_threads_dir=${opencv_dir}/build_threads
-build_threaded_simd_dir=${opencv_dir}/build_threaded-simd
+build_wasm_dir=build/wasm
+build_simd_dir=build/wasm_simd
+build_threads_dir=build/wasm_threads
+build_threaded_simd_dir=build/wasm_threaded-simd
 options=(
   --build_wasm
   --cmake_option="-DBUILD_LIST=core,imgproc,js"

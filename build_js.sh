@@ -1,7 +1,7 @@
 emsdk_dir=external/emsdk
 opencv_dir=external/opencv
 build_py=${opencv_dir}/platforms/js/build_js.py
-build_js_dir=${opencv_dir}/build_js
+build_js_dir=build/js
 options=(
   --disable_wasm
   --cmake_option="-DBUILD_LIST=core,imgproc,js"
